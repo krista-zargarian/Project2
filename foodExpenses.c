@@ -9,20 +9,30 @@ float mealFeesFirstDay();
 float mealFeesLastDay();
 float normalMealFees(int days);
 float getMealFees(int days);
-void displayTotal(int days);
+float getExcessMealFees(int days);
+float getCoveredCosts(int days);
+static float totalCost;
+static float totalSpent;
 
-//displays ONLY
-//prints out the total amount of meal fees
-void displayTotal(int days)
-{
-    printf("You owe a total of: $%.2f in meals\n", getMealFees(int days));
-}
-
-//calculates the total spending of meals on the trip
+//returns the total spending of meals on the trip
 float getMealFees(int days)
 {
+    return totalCost;
+}
+
+//the user is asked about their meal expenses when this is called
+//calculates and returns the excess fees 
+float getExcessMealFees(int days)
+{
     float total = mealFeesFirstDay() + normalMealFees(days) + mealFeesLastDay();
+    totalSpent = total;
     return total;
+}
+
+//this should return how much the company covered
+float getCoveredCosts(int days)
+{
+    return totalCost - totalSpent;
 }
 
 //calculates meal costs on the first day based on the departure hour
@@ -41,7 +51,7 @@ float mealFeesFirstDay()
     while(departure < 1 || departure > 12)
     {
         printf("Please enter a valid hour [1-12]: \n");
-        printf("(If your flight is at 11:30 am, just enter 11)\n");
+        printf("(If your flight is at 11:30 am, enter 11)\n");
         scanf(" %d", &departure);
     }
     printf("Enter am or pm: ");
@@ -58,14 +68,17 @@ float mealFeesFirstDay()
     {
         printf("How much did you pay for breakfast?\nEnter amount: ");
         scanf(" %f", &brkfst);
+        totalCost+=brkfst;
     } else if (departure < 12 && departure > 7 && strcmp(period, "am") == 0)
     {
         printf("How much did you pay for lunch?\nEnter amount: ");
         scanf(" %f", &lunch);
+        totalCost+=lunch;
     } else if(((departure < 6 && departure >= 1) && strcmp(period, "pm") == 0))
     {
         printf("How much did you pay for dinner?\nEnter amount: ");
         scanf(" %f", &dinner);
+        totalCost+=dinner;
     } else{
         printf("You did not get the chance to eat. You have not been charged.\n");
         return 0;
@@ -95,7 +108,7 @@ float mealFeesLastDay()
     while(arrival < 1 || arrival > 12)
     {
         printf("Please enter a valid hour [1-12]: \n");
-        printf("(If your flight is at 11:30 am, just enter 11)\n");
+        printf("(If your arrival is at 11:30 am, enter 11)\n");
         scanf(" %d", &arrival);
     }
     printf("Enter am or pm: ");
@@ -111,14 +124,17 @@ float mealFeesLastDay()
     {
         printf("How much did you pay for breakfast?\nEnter amount: ");
         scanf(" %f", &brkfst);
+        totalCost+=brkfst;
     } else if (arrival >= 1 && arrival < 7 && strcmp(period, "pm") == 0) 
     {
         printf("How much did you pay for lunch?\nEnter amount: ");
         scanf(" %f", &lunch);
+        totalCost+=lunch;
     } else if(arrival >= 7 && arrival < 12 && strcmp(period, "pm") == 0)
     {
         printf("How much did you pay for dinner?\nEnter amount: ");
         scanf(" %f", &dinner);
+        totalCost+=dinner;
     } else{
         printf("You did not get the chance to eat. You have not been charged.\n");
         return 0;
@@ -146,12 +162,15 @@ float normalMealFees(int days)
     {
         printf("How much did you spend on breakfast for day %d?\n", (days+1));
         scanf(" %f", &brkfst);
+        totalCost+=brkfst;
         brkfst-=9;
         printf("How much did you spend on lunch for day %d?\n", (days+1));
         scanf(" %f", &lunch);
+        totalCost+=lunch;
         lunch-=12;
         printf("How much did you spend on dinner for day %d?\n", (days+1));
         scanf(" %f", &dinner);
+        totalCost+=dinner;
         dinner-=16;
 
         if(brkfst <= 0 && lunch <= 0 && dinner <= 0)
@@ -164,6 +183,5 @@ float normalMealFees(int days)
         days--;
     }
     
-
     return total;
 }
