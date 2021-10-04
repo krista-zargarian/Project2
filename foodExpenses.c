@@ -157,18 +157,20 @@ float normalMealFees(int days)
 {
     float brkfst, lunch, dinner, total;
     total = 0;
+    int dayCount = days;
     days-=2;
+    int i = days;
     while (days > 0)
     {
-        printf("How much did you spend on breakfast for day %d?\n", (days+1));
+        printf("How much did you spend on breakfast for day %d?\n", (dayCount-i));
         scanf(" %f", &brkfst);
         totalCost+=brkfst;
         brkfst-=9;
-        printf("How much did you spend on lunch for day %d?\n", (days+1));
+        printf("How much did you spend on lunch for day %d?\n", (dayCount-i));
         scanf(" %f", &lunch);
         totalCost+=lunch;
         lunch-=12;
-        printf("How much did you spend on dinner for day %d?\n", (days+1));
+        printf("How much did you spend on dinner for day %d?\n", (dayCount-i));
         scanf(" %f", &dinner);
         totalCost+=dinner;
         dinner-=16;
@@ -181,6 +183,7 @@ float normalMealFees(int days)
             total+=((brkfst > 0) ? brkfst:0) + ((lunch > 0) ? lunch:0) + ((dinner > 0) ? dinner:0);
         }
         days--;
+        i--;
     }
     
     return total;
